@@ -1,5 +1,6 @@
 package com.github.udioshi85.cleanarchitecture.network
 
+import com.github.udioshi85.cleanarchitecture.network.services.QuoteGardenService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,19 +9,16 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitManager {
 
-    const val API_KEY = "FCJNDES03BE149TN"
-
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.BASIC
     }
 
     private val httpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
 
-    private val retrofit = Retrofit.Builder().baseUrl("https://www.alphavantage.co/")
+    private val retrofit = Retrofit.Builder().baseUrl("https://quote-garden.herokuapp.com/api/v2/")
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
-    val alphaVantageService: AlphaVantageService = retrofit.create(AlphaVantageService::class.java)
+    val quoteGardenService: QuoteGardenService = retrofit.create(QuoteGardenService::class.java)
 }

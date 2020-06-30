@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.github.udioshi85.cleanarchitecture.model.Loading
 import java.lang.Exception
 import java.lang.IllegalStateException
 
-class MultipleTypesAdapter(private var items: ArrayList<AdapterDataType>, private val typeFactory: TypeFactory) : RecyclerView.Adapter<BaseViewHolder<AdapterDataType>>() {
+class MultipleTypesAdapter(var items: ArrayList<AdapterDataType>, private val typeFactory: TypeFactory) : RecyclerView.Adapter<BaseViewHolder<AdapterDataType>>() {
 
     val commonData: Bundle? = typeFactory.getCommonData()
 
@@ -42,7 +43,24 @@ class MultipleTypesAdapter(private var items: ArrayList<AdapterDataType>, privat
         val diffResult = DiffUtil.calculateDiff(MultiTypesDiffCallback(items, newItems))
         diffResult.dispatchUpdatesTo(this)
 
-        this.items.clear()
-        this.items.addAll(newItems)
+        items.clear()
+        items.addAll(newItems)
+    }
+
+    fun addNewItems(newItems: ArrayList<AdapterDataType>) {
+        val startPosition = itemCount
+        items.addAll(newItems)
+        notifyItemRangeInserted(startPosition, items.size)
+    }
+
+    fun addLoadingItem(item: AdapterDataType) {
+        val position = itemCount
+        this.items.add(item)
+        notifyItemInserted(position)
+    }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

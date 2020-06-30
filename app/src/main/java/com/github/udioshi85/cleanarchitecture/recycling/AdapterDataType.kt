@@ -4,4 +4,5 @@ import java.io.Serializable
 
 interface AdapterDataType: Serializable {
     fun type(typeFactory: TypeFactory): Int
+    fun uniqueId(): Int
 }
